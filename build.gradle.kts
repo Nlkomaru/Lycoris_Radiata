@@ -3,6 +3,7 @@ plugins {
     id("maven-publish")
     kotlin("jvm") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.0.0"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 base {
@@ -36,6 +37,10 @@ dependencies {
     modImplementation("net.fabricmc", "fabric-language-kotlin", project.property("fabric_kotlin_version") as String)
 
     transitiveInclude(implementation("club.minnced", "discord-webhooks", "0.8.4"))
+
+    transitiveInclude(implementation("org.jetbrains.kotlinx", "kotlinx-datetime", "0.4.0"))
+
+    transitiveInclude(implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4"))
 
     transitiveInclude(implementation("com.github.shynixn.mccoroutine", "mccoroutine-fabric-api", "2.13.0"))
     transitiveInclude(implementation("com.github.shynixn.mccoroutine", "mccoroutine-fabric-core", "2.13.0"))

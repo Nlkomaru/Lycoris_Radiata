@@ -2,14 +2,13 @@
 	"schemaVersion": 1,
 	"id": "lycoris_radiata",
 	"version": "${version}",
-	"name": "Screenshot_send",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Lycoris Radiata",
+	"description": "This is a mod that record the screenshot and send it to discord server via webhook.",
 	"authors": [
-		"Me!"
+		"Nikomaru"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Nlkomaru/Lycoris_Radiata"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/screenshot_send/icon.jpg",

@@ -6,10 +6,13 @@ import club.minnced.discord.webhook.send.WebhookEmbedBuilder
 import club.minnced.discord.webhook.send.WebhookMessageBuilder
 import com.github.shynixn.mccoroutine.fabric.launch
 import com.github.shynixn.mccoroutine.fabric.mcCoroutineConfiguration
+import dev.nikomaru.lycoris_radiata.file.Config
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
+import net.kyori.adventure.platform.fabric.FabricClientAudiences
+import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.client.MinecraftClient
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -23,12 +26,17 @@ import kotlin.io.path.Path
 
 object LycorisRadiata : ModInitializer {
     private val logger = LoggerFactory.getLogger("lycoris_radiata")
-    val url =
-        "https://discord.com/api/webhooks/1157620141769625762/QbAFhpSZlkWyIFx75zhFJObP_JskHP3y09hEsjLVaIfPcn4mP0azbp4XO10TFDjn1y9I"
-    val webhookClient = WebhookClient.withUrl(url)
+
 
     override fun onInitialize() {
         logger.info("Hello Fabric world!")
+
+        Config.load()
+
+        if (Config.config.webhookUrl == null) {
+            logger.info("webhook url is null")
+            return
+        }
 
         ClientLifecycleEvents.CLIENT_STARTED.register(ClientLifecycleEvents.ClientStarted { cli ->
             mcCoroutineConfiguration.minecraftExecutor = Executor { r ->
@@ -64,19 +72,40 @@ object LycorisRadiata : ModInitializer {
 
                     val playerName = MinecraftClient.getInstance().session!!.username
 
-                    val sdf = SimpleDateFormat("yyyy/MM/dd HH:mm:ss z");
+                    val address = MinecraftClient.getInstance().currentServerEntry?.address
+                    val location = MinecraftClient.getInstance().gameRenderer.camera.pos.run {
+                        "${x.toInt()}, ${y.toInt() - 1}, ${z.toInt()}"
+                    }
+
+                    val sdf = SimpleDateFormat(Config.config.format)
+                    val url = Config.config.webhookUrl!!
 
                     val embed = WebhookEmbedBuilder().setTitle(WebhookEmbed.EmbedTitle("Record Screenshot", null))
-                        .setColor(0x00ff00)
-                        .addField(WebhookEmbed.EmbedField(true, "Player Name", playerName))
-                        .addField(WebhookEmbed.EmbedField(true, "Record Date", sdf.format(Date())))
-                        .setFooter(WebhookEmbed.EmbedFooter("Data is recorded by Lycoris Radiata Mod", null)).build()
+                        .setColor(0x00ff00).apply {
+                            if (Config.config.recordPlayerName) {
+                                addField(WebhookEmbed.EmbedField(true, "Player Name", playerName))
+                            }
+                        }.apply {
+                            if (Config.config.recordLocation) {
+                                addField(WebhookEmbed.EmbedField(true, "Location", location))
+                            }
+                        }.apply {
+                            if (address != null) {
+                                addField(WebhookEmbed.EmbedField(false, "Server Address", address))
+                            }
+                        }.apply {
+                            if (Config.config.recordDate) {
+                                addField(WebhookEmbed.EmbedField(false, "Date", sdf.format(Date())))
+                            }
+                        }.setFooter(WebhookEmbed.EmbedFooter("Data is recorded by Lycoris Radiata Mod", null)).build()
 
                     val builder = WebhookMessageBuilder().setUsername("Lycoris Radiata Mod")
                         .setAvatarUrl("https://upload.wikimedia.org/wikipedia/commons/4/47/Lycoris_radiata_-_Kinchakuda_2018_-_1.jpg")
                         .addEmbeds(embed).addFile(file).build()
-
+                    val webhookClient = WebhookClient.withUrl(url)
                     webhookClient.send(builder)
+                    val client = FabricClientAudiences.of().audience()
+                    client.sendMessage(MiniMessage.miniMessage().deserialize("<green>screenshot is recorded!"))
                 }
             } while (key.reset())
         }
