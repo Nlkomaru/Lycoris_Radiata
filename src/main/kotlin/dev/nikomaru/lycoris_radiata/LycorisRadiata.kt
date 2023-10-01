@@ -103,9 +103,11 @@ object LycorisRadiata : ModInitializer {
                         .setAvatarUrl("https://upload.wikimedia.org/wikipedia/commons/4/47/Lycoris_radiata_-_Kinchakuda_2018_-_1.jpg")
                         .addEmbeds(embed).addFile(file).build()
                     val webhookClient = WebhookClient.withUrl(url)
-                    webhookClient.send(builder)
+                    webhookClient.send(builder).thenAccept {message ->
                     val client = FabricClientAudiences.of().audience()
-                    client.sendMessage(MiniMessage.miniMessage().deserialize("<green>screenshot is recorded!"))
+                        client.sendMessage(MiniMessage.miniMessage().deserialize("<green>screenshot is recorded! </green> <yellow><click:copy_to_clipboard:'${message.attachments.first().url}'>[Copy image link]</click>"))
+                    }
+
                 }
             } while (key.reset())
         }
