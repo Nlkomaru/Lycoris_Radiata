@@ -46,7 +46,7 @@ dependencies {
     transitiveInclude(implementation("com.github.shynixn.mccoroutine", "mccoroutine-fabric-core", "2.13.0"))
 
     implementation("net.kyori:adventure-text-minimessage:4.14.0")
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.9.0")!!)
+    modImplementation(include("net.kyori:adventure-platform-fabric:5.10.0")!!)
 
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())
