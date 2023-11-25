@@ -29,21 +29,20 @@ val transitiveInclude: Configuration by configurations.creating {
 
 
 dependencies {
-    minecraft("com.mojang", "minecraft", "${project.property("minecraft_version")}")
-    mappings("net.fabricmc", "yarn", project.property("yarn_mappings") as String)
+    minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
+    mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}")
 
-    modImplementation("net.fabricmc", "fabric-loader", project.property("loader_version") as String)
-    modImplementation("net.fabricmc.fabric-api", "fabric-api", project.property("fabric_version") as String)
-    modImplementation("net.fabricmc", "fabric-language-kotlin", project.property("fabric_kotlin_version") as String)
+    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${project.property("fabric_kotlin_version")}")
 
-    transitiveInclude(implementation("club.minnced", "discord-webhooks", "0.8.4"))
+    transitiveInclude(implementation("club.minnced:discord-webhooks:0.8.4")!!)
 
-    transitiveInclude(implementation("org.jetbrains.kotlinx", "kotlinx-datetime", "0.4.0"))
+    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")!!)
+    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")!!)
 
-    transitiveInclude(implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.6.4"))
-
-    transitiveInclude(implementation("com.github.shynixn.mccoroutine", "mccoroutine-fabric-api", "2.13.0"))
-    transitiveInclude(implementation("com.github.shynixn.mccoroutine", "mccoroutine-fabric-core", "2.13.0"))
+    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.13.0")!!)
+    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.13.0")!!)
 
     implementation("net.kyori:adventure-text-minimessage:4.14.0")
     modImplementation(include("net.kyori:adventure-platform-fabric:5.10.0")!!)
