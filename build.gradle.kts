@@ -38,7 +38,7 @@ dependencies {
 
     transitiveInclude(implementation("club.minnced:discord-webhooks:0.8.4")!!)
 
-    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")!!)
+    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")!!)
     transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")!!)
 
     transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.13.0")!!)
