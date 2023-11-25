@@ -3,7 +3,7 @@ plugins {
     id("maven-publish")
     kotlin("jvm") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    kotlin("plugin.serialization") version "1.6.10"
+    kotlin("plugin.serialization") version "1.9.21"
 }
 
 base {
