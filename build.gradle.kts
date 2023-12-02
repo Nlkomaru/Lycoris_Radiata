@@ -1,9 +1,9 @@
 plugins {
-    id("fabric-loom") version "1.1-SNAPSHOT"
+    id("fabric-loom") version "1.4-SNAPSHOT"
     id("maven-publish")
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    kotlin("plugin.serialization") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 base {
@@ -23,7 +23,6 @@ repositories {
 
 val transitiveInclude: Configuration by configurations.creating {
     exclude(group = "com.mojang")
-    exclude(group = "org.jetbrains.kotlin")
     exclude(group = "org.jetbrains.kotlinx")
 }
 
@@ -39,7 +38,7 @@ dependencies {
     transitiveInclude(implementation("club.minnced:discord-webhooks:0.8.4")!!)
 
     transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")!!)
-    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")!!)
+    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")!!)
 
     transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.13.0")!!)
     transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.13.0")!!)
@@ -52,24 +51,31 @@ dependencies {
     }
 }
 
-
 tasks {
     val javaVersion = JavaVersion.VERSION_17
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-        sourceCompatibility = javaVersion.toString()
-        targetCompatibility = javaVersion.toString()
-        options.release.set(javaVersion.toString().toInt())
+    compileKotlin {
+        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.javaParameters = true
     }
-    jar { from("LICENSE") { rename { "${it}_${base.archivesName}" } } }
+    build {
+        dependsOn(shadowJar)
+    }
     processResources {
         inputs.property("version", project.version)
         filesMatching("fabric.mod.json") { expand(mutableMapOf("version" to project.version)) }
     }
-    shadowJar {
-
+    jar {
+        from("LICENSE") {
+            rename {
+                "${it}_${base.archivesName}"
+            }
+        }
     }
-    build {
+    withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
+        sourceCompatibility = javaVersion.toString()
+        targetCompatibility = javaVersion.toString()
+        options.release.set(javaVersion.toString().toInt())
     }
     java {
         sourceCompatibility = javaVersion
