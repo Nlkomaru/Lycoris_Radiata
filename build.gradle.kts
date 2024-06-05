@@ -41,7 +41,7 @@ dependencies {
     transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")!!)
 
     transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.16.0")!!)
-    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.13.0")!!)
+    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.16.0")!!)
 
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     modImplementation(include("net.kyori:adventure-platform-fabric:5.11.0")!!)
