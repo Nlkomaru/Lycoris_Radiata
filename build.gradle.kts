@@ -1,9 +1,9 @@
 plugins {
     id("fabric-loom") version "1.5-SNAPSHOT"
     id("maven-publish")
-    kotlin("jvm") version "1.9.24"
+    kotlin("jvm") version "2.0.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    kotlin("plugin.serialization") version "1.9.24"
+    kotlin("plugin.serialization") version "2.0.20"
 }
 
 base {
@@ -37,11 +37,12 @@ dependencies {
 
     transitiveInclude(implementation("club.minnced:discord-webhooks:0.8.4")!!)
 
-    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")!!)
+    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")!!)
     transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")!!)
 
     transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.19.0")!!)
     transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.16.0")!!)
+
 
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     modImplementation(include("net.kyori:adventure-platform-fabric:5.13.0")!!)
