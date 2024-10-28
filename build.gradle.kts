@@ -45,7 +45,7 @@ dependencies {
 
 
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.14.1")!!)
+    modImplementation(include("net.kyori:adventure-platform-fabric:6.1.0")!!)
 
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())
