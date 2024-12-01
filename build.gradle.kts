@@ -1,15 +1,12 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
-    id("fabric-loom") version "1.5-SNAPSHOT"
+    id("fabric-loom") version "1.8-SNAPSHOT"
     id("maven-publish")
-    kotlin("jvm") version "2.0.20"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    kotlin("plugin.serialization") version "2.0.20"
+    kotlin("jvm") version "2.0.21"
+    id("com.gradleup.shadow") version "9.0.0-beta2"
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
-base {
-    val archivesBaseName: String by project
-    archivesName.set(archivesBaseName)
-}
 
 version = project.property("mod_version") as String
 group = project.property("maven_group") as String
@@ -28,6 +25,8 @@ val transitiveInclude: Configuration by configurations.creating {
 
 
 dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.1.0")
+
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
     mappings("net.fabricmc:yarn:${project.property("yarn_mappings")}")
 
@@ -38,14 +37,13 @@ dependencies {
     transitiveInclude(implementation("club.minnced:discord-webhooks:0.8.4")!!)
 
     transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")!!)
-    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")!!)
+    transitiveInclude(implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")!!)
 
-    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.19.0")!!)
-    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.16.0")!!)
-
+    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-api:2.20.0")!!)
+    transitiveInclude(implementation("com.github.shynixn.mccoroutine:mccoroutine-fabric-core:2.20.0")!!)
 
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
-    modImplementation(include("net.kyori:adventure-platform-fabric:5.14.1")!!)
+    modImplementation(include("net.kyori:adventure-platform-fabric:6.1.0")!!)
 
     transitiveInclude.resolvedConfiguration.resolvedArtifacts.forEach {
         include(it.moduleVersion.id.toString())
@@ -53,10 +51,13 @@ dependencies {
 }
 
 tasks {
-    val javaVersion = JavaVersion.VERSION_17
+    val javaVersion = JavaVersion.VERSION_21
     compileKotlin {
-        kotlinOptions.jvmTarget = "17"
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
         kotlinOptions.javaParameters = true
+    }
+    shadowJar {
+        setProperty("zip64", true)
     }
     build {
         dependsOn(shadowJar)
@@ -82,5 +83,8 @@ tasks {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
         withSourcesJar()
+
     }
 }
+
+

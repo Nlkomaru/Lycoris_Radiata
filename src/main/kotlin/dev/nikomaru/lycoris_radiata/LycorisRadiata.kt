@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
-import net.kyori.adventure.platform.fabric.FabricClientAudiences
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.minecraft.client.MinecraftClient
 import org.slf4j.LoggerFactory
@@ -20,7 +19,6 @@ import java.nio.file.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executor
-import kotlin.collections.HashMap
 import kotlin.io.path.Path
 
 
@@ -104,8 +102,8 @@ object LycorisRadiata : ModInitializer {
                         .addEmbeds(embed).addFile(file).build()
                     val webhookClient = WebhookClient.withUrl(url)
                     webhookClient.send(builder).thenAccept {message ->
-                    val client = FabricClientAudiences.of().audience()
-                        client.sendMessage(MiniMessage.miniMessage().deserialize("<green>screenshot is recorded! </green> <yellow><click:copy_to_clipboard:'${message.attachments.first().url}'>[Copy image link]</click>"))
+                        val client = MinecraftClient.getInstance()
+                        client.player!!.sendMessage(MiniMessage.miniMessage().deserialize("<green>screenshot is recorded! </green> <yellow><click:copy_to_clipboard:'${message.attachments.first().url}'>[Copy image link]</click>"))
                     }
 
                 }
